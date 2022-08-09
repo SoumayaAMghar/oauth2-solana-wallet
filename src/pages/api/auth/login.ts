@@ -12,7 +12,7 @@ const OAuthScope = ["identify","guilds","guilds.members.read"].join(" ");
 const OAuthData = new URLSearchParams({
   response_type: "code",
   client_id: '998913822712672276' as string,
-  redirect_uri: 'http://localhost:3000/wallet',
+  redirect_uri: 'https://oauth2-solana-wallet.vercel.app/wallet',
   scope: OAuthScope
 });
  // redirect the user to the resource owner for authorization
