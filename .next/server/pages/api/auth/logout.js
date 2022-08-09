@@ -5,13 +5,6 @@ exports.id = 845;
 exports.ids = [845];
 exports.modules = {
 
-/***/ 4511:
-/***/ ((module) => {
-
-module.exports = require("next-iron-session");
-
-/***/ }),
-
 /***/ 3283:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -19,7 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _util_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _util_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5838);
 
 const handler = async (req, res)=>{
     req.session.destroy();
@@ -30,17 +23,21 @@ const handler = async (req, res)=>{
 
 /***/ }),
 
-/***/ 8:
+/***/ 5838:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "N": () => (/* binding */ withSession)
-/* harmony export */ });
-/* harmony import */ var next_iron_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4511);
-/* harmony import */ var next_iron_session__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_iron_session__WEBPACK_IMPORTED_MODULE_0__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "N": () => (/* binding */ withSession)
+});
+
+;// CONCATENATED MODULE: external "next-iron-session"
+const external_next_iron_session_namespaceObject = require("next-iron-session");
+;// CONCATENATED MODULE: ./src/util/session.ts
 
 function withSession(handler) {
-    return (0,next_iron_session__WEBPACK_IMPORTED_MODULE_0__.withIronSession)(handler, {
+    return (0,external_next_iron_session_namespaceObject.withIronSession)(handler, {
         password: process.env.COOKIE_SECRET,
         cookieName: "session",
         ttl: 15 * 24 * 3600,

@@ -10,10 +10,10 @@ const OAuthScope = ["identify","guilds","guilds.members.read"].join(" ");
 const handler = async (req: NextIronRequest, res: NextApiResponse) => {
   // const { db } = await dbConnect();
 
-  // if (!req.query.code) {
-  //   res.status(404).redirect("/404");
-  //   return;
-  // }
+  if (!req.query.code) {
+    res.status(404).redirect("/404");
+    return;
+  }
 
   try {
     const { data } = await axios.post(
@@ -23,7 +23,7 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
         client_secret: process.env.CLIENT_SECRET,
         grant_type: "authorization_code",
         code: req.query.code,
-        redirect_uri: `${process.env.DOMAIN}/wallet/index`,
+        redirect_uri: `${process.env.DOMAIN}/api/auth/callback`,
       }),
       {
         headers: {
@@ -104,12 +104,12 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
       avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
     });
   } catch (e) {
-    res.redirect("/index");
+    res.redirect("/r?true");
     return;
   }
 
   await req.session.save();
-  res.redirect("/index");
+  res.redirect("/?r=true");
 };
 
 export default withSession(handler);

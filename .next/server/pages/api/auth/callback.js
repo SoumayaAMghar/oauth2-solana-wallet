@@ -5,47 +5,43 @@ exports.id = 712;
 exports.ids = [712];
 exports.modules = {
 
-/***/ 2167:
-/***/ ((module) => {
-
-module.exports = require("axios");
-
-/***/ }),
-
-/***/ 4511:
-/***/ ((module) => {
-
-module.exports = require("next-iron-session");
-
-/***/ }),
-
-/***/ 6113:
-/***/ ((module) => {
-
-module.exports = require("crypto");
-
-/***/ }),
-
-/***/ 3477:
-/***/ ((module) => {
-
-module.exports = require("querystring");
-
-/***/ }),
-
-/***/ 5725:
+/***/ 7665:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3477);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _util_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2167);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _util_crypt__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3852);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ callback)
+});
+
+;// CONCATENATED MODULE: external "querystring"
+const external_querystring_namespaceObject = require("querystring");
+// EXTERNAL MODULE: ./src/util/session.ts + 1 modules
+var session = __webpack_require__(5838);
+;// CONCATENATED MODULE: external "axios"
+const external_axios_namespaceObject = require("axios");
+var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_namespaceObject);
+;// CONCATENATED MODULE: external "crypto"
+const external_crypto_namespaceObject = require("crypto");
+;// CONCATENATED MODULE: ./src/util/crypt.ts
+
+const [key, initVector] = JSON.parse(process.env.CRYPT_KEYS).map((key)=>Buffer.from(key, "base64"));
+function crypt(cipher, data, inputType, outputType) {
+    return Buffer.concat([
+        cipher.update(data, inputType),
+        cipher.final(), 
+    ]).toString(outputType);
+}
+function encrypt(data, inputType = "utf8", outputType = "base64") {
+    return crypt((0,external_crypto_namespaceObject.createCipheriv)("aes-256-ctr", key, initVector), data, inputType, outputType);
+}
+function decrypt(data, inputType = "base64", outputType = "utf8") {
+    crypt(createDecipheriv("aes-256-ctr", key, initVector), data, inputType, outputType);
+}
+
+;// CONCATENATED MODULE: ./src/pages/api/auth/callback.ts
 
 
 
@@ -58,17 +54,17 @@ const OAuthScope = [
 ].join(" ");
 const handler = async (req, res)=>{
     // const { db } = await dbConnect();
-    // if (!req.query.code) {
-    //   res.status(404).redirect("/404");
-    //   return;
-    // }
+    if (!req.query.code) {
+        res.status(404).redirect("/404");
+        return;
+    }
     try {
-        const { data  } = await axios__WEBPACK_IMPORTED_MODULE_2___default().post("https://discordapp.com/api/v9/oauth2/token", (0,querystring__WEBPACK_IMPORTED_MODULE_0__.stringify)({
+        const { data  } = await external_axios_default().post("https://discordapp.com/api/v9/oauth2/token", (0,external_querystring_namespaceObject.stringify)({
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
             grant_type: "authorization_code",
             code: req.query.code,
-            redirect_uri: `${process.env.DOMAIN}/wallet/index`
+            redirect_uri: `${process.env.DOMAIN}/api/auth/callback`
         }), {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -77,7 +73,7 @@ const handler = async (req, res)=>{
         if (data.scope !== OAuthScope) {
             return res.status(403).send(`Expected scope "${OAuthScope}" but received scope "${data.scope}"`);
         }
-        const { data: user  } = await axios__WEBPACK_IMPORTED_MODULE_2___default().get("https://discordapp.com/api/v9/users/@me", {
+        const { data: user  } = await external_axios_default().get("https://discordapp.com/api/v9/users/@me", {
             headers: {
                 Authorization: `Bearer ${data.access_token}`
             }
@@ -126,17 +122,46 @@ const handler = async (req, res)=>{
         // }
         await req.session.set("user", {
             ...user,
-            token: (0,_util_crypt__WEBPACK_IMPORTED_MODULE_3__/* .encrypt */ .H)(user.id),
+            token: encrypt(user.id),
             avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`
         });
     } catch (e) {
-        res.redirect("/index");
+        res.redirect("/r?true");
         return;
     }
     await req.session.save();
-    res.redirect("/index");
+    res.redirect("/?r=true");
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_util_session__WEBPACK_IMPORTED_MODULE_1__/* .withSession */ .N)(handler));
+/* harmony default export */ const callback = ((0,session/* withSession */.N)(handler));
+
+
+/***/ }),
+
+/***/ 5838:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "N": () => (/* binding */ withSession)
+});
+
+;// CONCATENATED MODULE: external "next-iron-session"
+const external_next_iron_session_namespaceObject = require("next-iron-session");
+;// CONCATENATED MODULE: ./src/util/session.ts
+
+function withSession(handler) {
+    return (0,external_next_iron_session_namespaceObject.withIronSession)(handler, {
+        password: process.env.COOKIE_SECRET,
+        cookieName: "session",
+        ttl: 15 * 24 * 3600,
+        cookieOptions: {
+            secure: "production" === "production",
+            sameSite: "strict",
+            httpOnly: true
+        }
+    });
+}
 
 
 /***/ })
@@ -148,7 +173,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [944], () => (__webpack_exec__(5725)));
+var __webpack_exports__ = (__webpack_exec__(7665));
 module.exports = __webpack_exports__;
 
 })();

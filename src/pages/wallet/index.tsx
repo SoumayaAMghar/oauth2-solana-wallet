@@ -45,8 +45,18 @@ const Context: FC<{ children: ReactNode}> = ({children}) => {
 
 const Content: FC = () => {
   return (
-    <div className="App">
-      <WalletMultiButton />
+    <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12 fixed z-50 inset-0 overflow-y-auto h-full w-full px-4">
+    <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md items-center space-x-1 backdrop-blur">
+    <div className="flex flex-col justify-center items-center">
+
+        <p className="text-gray-600 text-center mb-6">Click bellow to choose a wallet</p>
+  
+      <div className="App">
+       <WalletMultiButton /> 
+      </div>
+      
+    </div>
+    </div>
     </div>
   );
 }
