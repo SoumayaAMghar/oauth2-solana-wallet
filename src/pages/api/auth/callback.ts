@@ -8,7 +8,6 @@ import { decrypt, encrypt } from "../../../util/crypt";
 const OAuthScope = ["identify","guilds","guilds.members.read"].join(" ");
 
 const handler = async (req: NextIronRequest, res: NextApiResponse) => {
-  // const { db } = await dbConnect();
 
   if (!req.query.code) {
     res.status(404).redirect("/404");
@@ -32,14 +31,6 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
       }
     );
 
-    if (data.scope !== OAuthScope) {
-      return res
-        .status(403)
-        .send(
-          `Expected scope "${OAuthScope}" but received scope "${data.scope}"`
-        );
-    }
-
     const { data: user } = await axios.get(
       "https://discordapp.com/api/v9/users/@me",
       {
@@ -49,67 +40,13 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
       }
     );
 
-    if (user.email === null) {
-      return res
-        .status(400)
-        .send("Please verify your Discord's account E-mail before logging in.");
-    }
-
-    // const exists = await db
-    //   .collection("users")
-    //   .countDocuments({ _id: user.id });
-
-    // if (exists) {
-    //   db.collection("users").updateOne(
-    //     { _id: user.id },
-    //     {
-    //       $set: {
-    //         email: user.email,
-    //         name: user.username,
-    //         discriminator: user.discriminator,
-    //         avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-    //       },
-    //       $addToSet: {
-    //         ip: req.headers["cf-connecting-ip"],
-    //       },
-    //     }
-    //   );
-    // } else {
-    //   db.collection("users").insertOne({
-    //     _id: user.id,
-    //     email: user.email,
-    //     name: user.username,
-    //     discriminator: user.discriminator,
-    //     avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-    //     ip: [req.headers["cf-connecting-ip"]],
-    //   });
-    // }
-
-    // const staffUser = await db.collection("staff").findOne({ _id: user.id });
-
-    // if (staffUser) {
-    //   db.collection("staff").updateOne(
-    //     { _id: user.id },
-    //     {
-    //       $set: {
-    //         avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-    //       },
-    //     }
-    //   );
-    // }
-
-    await req.session.set("user", {
-      ...user,
-      token: encrypt(user.id),
-      avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-    });
   } catch (e) {
     res.redirect("/r?true");
     return;
   }
 
   await req.session.save();
-  res.redirect("/?r=true");
+  res.redirect("/wallet?token=${json.access_token}");
 };
 
 export default withSession(handler);
