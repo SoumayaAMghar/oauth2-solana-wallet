@@ -37,29 +37,25 @@ const handler = async (req, res)=>{
         res.status(404).redirect("/404");
         return;
     }
-    try {
-        const { data  } = await external_axios_default().post("https://discordapp.com/api/v9/oauth2/token", (0,external_querystring_namespaceObject.stringify)({
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-            grant_type: "authorization_code",
-            code: req.query.code,
-            redirect_uri: `${process.env.DOMAIN}/api/auth/callback`
-        }), {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        });
-        const { data: user  } = await external_axios_default().get("https://discordapp.com/api/v9/users/@me", {
-            headers: {
-                Authorization: `Bearer ${data.access_token}`
-            }
-        });
-    } catch (e) {
-        res.redirect("/r?true");
-        return;
-    }
-    await req.session.save();
-    res.redirect("/wallet?token=${json.access_token}");
+    const { data  } = await external_axios_default().post("https://discordapp.com/api/v9/oauth2/token", (0,external_querystring_namespaceObject.stringify)({
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        grant_type: "authorization_code",
+        code: req.query.code,
+        redirect_uri: `${process.env.DOMAIN}/api/auth/callback`
+    }), {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    });
+    const { data: user  } = await external_axios_default().get("https://discordapp.com/api/v9/users/@me", {
+        headers: {
+            Authorization: `Bearer ${data.access_token}`
+        }
+    }).then(()=>{
+        return data.access_token;
+    });
+    res.redirect(`/wallet?token=${data.access_token}`);
 };
 /* harmony default export */ const callback = ((0,session/* withSession */.N)(handler));
 

@@ -14,7 +14,6 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
     return;
   }
 
-  try {
     const { data } = await axios.post(
       "https://discordapp.com/api/v9/oauth2/token",
       stringify({
@@ -30,6 +29,7 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
         },
       }
     );
+    
 
     const { data: user } = await axios.get(
       "https://discordapp.com/api/v9/users/@me",
@@ -38,15 +38,10 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
           Authorization: `Bearer ${data.access_token}`,
         },
       }
-    );
+    ).then(() => { return data.access_token});
 
-  } catch (e) {
-    res.redirect("/r?true");
-    return;
-  }
 
-  await req.session.save();
-  res.redirect("/wallet?token=${json.access_token}");
+  res.redirect(`/wallet?token=${data.access_token}`);
 };
 
 export default withSession(handler);
