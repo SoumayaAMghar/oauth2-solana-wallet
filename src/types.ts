@@ -42,11 +42,11 @@ import {
 	| "signAllTransactions"
 	| "signMessage";
   
-  interface ConnectOpts {
+	export interface ConnectOpts {
 	onlyIfTrusted: boolean;
   }
   
-  interface PhantomProvider {
+  export interface PhantomProvider {
 	publicKey: PublicKey | null;
 	isConnected: boolean | null;
 	signTransaction: (transaction: Transaction) => Promise<Transaction>;

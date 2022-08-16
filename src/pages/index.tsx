@@ -6,9 +6,10 @@ import Link from "next/link";
 import { User, UserData } from "src/types";
 import { withSession } from "src/util/session";
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet} from '@solana/wallet-adapter-react';
 import React, { FC, useCallback } from 'react';
-import {PhantomProvider} from "src/types";
+import {Connection ,clusterApiUrl} from "@solana/web3.js"
+import {PhantomProvider} from "../types";
 
 
 interface Props {
@@ -17,6 +18,10 @@ interface Props {
 }
 
 export default function MainPage({ user }: Props) {
+  // const createConnection = () => {
+  //   return new Connection(clusterApiUrl("devnet"));
+    
+  // };
   const FC = () => {
     const { connection } = useConnection();
     const { publicKey } = useWallet();
