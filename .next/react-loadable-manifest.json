@@ -22,7 +22,7 @@
   "..\\..\\node_modules\\@solana\\wallet-adapter-salmon\\lib\\esm\\adapter.mjs -> salmon-adapter-sdk": {
     "id": 1578,
     "files": [
-      "static/chunks/290.3cd32e6a87c80f10.js"
+      "static/chunks/578.6367a05017d858de.js"
     ]
   },
   "..\\..\\node_modules\\@solana\\wallet-adapter-solflare\\lib\\esm\\adapter.mjs -> @solflare-wallet/sdk": {

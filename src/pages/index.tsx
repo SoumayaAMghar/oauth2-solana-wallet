@@ -16,11 +16,7 @@ interface Props {
 }
 
 export default function MainPage({ user }: Props) {
-  // const createConnection = () => {
-  //   return new Connection(clusterApiUrl("devnet"));
-    
-  // };
- 
+
   return (
     <>
      <Head>
