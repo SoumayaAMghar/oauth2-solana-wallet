@@ -8,8 +8,6 @@ import { withSession } from "src/util/session";
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import { useConnection, useWallet} from '@solana/wallet-adapter-react';
 import React, { FC, useCallback } from 'react';
-import {Connection ,clusterApiUrl} from "@solana/web3.js"
-import {PhantomProvider} from "../types";
 
 
 interface Props {
@@ -22,16 +20,6 @@ export default function MainPage({ user }: Props) {
   //   return new Connection(clusterApiUrl("devnet"));
     
   // };
-  const FC = () => {
-    const { connection } = useConnection();
-    const { publicKey } = useWallet();
-
-    const onClick = useCallback(async () => {
-        if (!publicKey) throw new WalletNotConnectedError();
-
-        await connection.PhantomProvider.connect();
-      }, [publicKey, connection]);
-    return publicKey;}
  
   return (
     <>
@@ -81,7 +69,7 @@ export default function MainPage({ user }: Props) {
             
             <p className="text-gray-600 text-center">Click below to login with Discord</p>
             <Link href="/api/auth/login" passHref>
-              <button onClick={onClick} disabled={!publicKey} className=" mt-4 px-4 py-1 text-sm text-indigo-500 font-semibold rounded-full border border-indigo-500 hover:bg-indigo-500 hover:text-gray-50 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-5555dd-200 focus:ring-offset-2">
+              <button className=" mt-4 px-4 py-1 text-sm text-indigo-500 font-semibold rounded-full border border-indigo-500 hover:bg-indigo-500 hover:text-gray-50 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-5555dd-200 focus:ring-offset-2">
                 Login
               </button>
             </Link>
@@ -104,7 +92,7 @@ export default function MainPage({ user }: Props) {
               {user.username}#{user.discriminator}
             </h1>
             <Link href="/api/auth/logout" passHref>
-              <button onClick={onClick} disabled={!publicKey} className="px-2.5 py-2 text-sm flex justify-start text-indigo-500 font-semibold rounded-full border border-indigo-500 hover:bg-indigo-500 hover:text-gray-50 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-5555dd-200 focus:ring-offset-2">
+              <button className="px-2.5 py-2 text-sm flex justify-start text-indigo-500 font-semibold rounded-full border border-indigo-500 hover:bg-indigo-500 hover:text-gray-50 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-5555dd-200 focus:ring-offset-2">
                 Logout
               </button>
             </Link>
@@ -121,21 +109,3 @@ export default function MainPage({ user }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = withSession(developerRoute)
-
-
-
-const connecttowallet : FC = () => {
-    const { publicKey } = useWallet();
-
-    const onClick = useCallback(async () => {
-        if (!publicKey) throw new WalletNotConnectedError();
-
-        await connect();
-    }, [publicKey]);
-
-    return (
-        <button onClick={onClick} disabled={!publicKey}>
-          
-        </button>
-    );
-};

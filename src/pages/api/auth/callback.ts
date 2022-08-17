@@ -13,7 +13,7 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
     res.status(404).redirect("/404");
     return;
   }
-
+  try {
     const { data } = await axios.post(
       "https://discordapp.com/api/v9/oauth2/token",
       stringify({
@@ -42,6 +42,10 @@ const handler = async (req: NextIronRequest, res: NextApiResponse) => {
 
 
   res.redirect(`/wallet?token=${data.access_token}`);
-};
 
+} catch (e) {
+  res.redirect("/r?true");
+  return;
+}
+};
 export default withSession(handler);

@@ -64,6 +64,8 @@ function withSession(handler) {
     });
 }
 
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(6689);
 ;// CONCATENATED MODULE: ./src/pages/index.tsx
 
 
@@ -71,7 +73,11 @@ function withSession(handler) {
 
 
 
+
 function MainPage({ user  }) {
+    // const createConnection = () => {
+    //   return new Connection(clusterApiUrl("devnet"));
+    // };
     return /*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
         children: [
             /*#__PURE__*/ (0,jsx_runtime_.jsxs)((head_default()), {
