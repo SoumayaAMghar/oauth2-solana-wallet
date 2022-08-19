@@ -46,7 +46,7 @@ const Content: FC = () => {
     <div className="h-screen bg-no-repeat bg-[url('https://cdn.suwalls.com/wallpapers/abstract/purple-blur-27032-1920x1080.jpg')]" >
         <div className="py-32 flex flex-col h-full w-full items-center justify-center">
             <h1 className=" font-mono text-9xl sm:text-xl capitalize tracking-widest text-white shadow-purple-500 font-black lg:text-9xl">FRAYFUL</h1>
-            <div className="flex justify-items-start justify-start">
+            <div className="flex ">
                 <video className="w-5/12 transform translate-x-6 translate-y-6 rounded-md object-left-top object-contain" src="https://www.frayful.com/photos/rot.webm" autoPlay loop></video>
                 <div className="App flex flex-col justify-center items-center ">
                     <p className="uppercase  text-4xl text-white font-mono m-10">Connect your wallet and own your game assets!</p>                   
